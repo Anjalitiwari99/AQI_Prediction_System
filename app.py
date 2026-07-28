@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import streamlit as st
 import pandas as pd
 import os
+from datetime import datetime
 
 # ==========================================================
 # PAGE CONFIGURATION
@@ -535,64 +536,141 @@ elif page == "🤖 Prediction":
         if prediction <= 50:
             category = "🟢 Good"
             color = "green"
-            advice = "Air quality is excellent. Enjoy outdoor activities."
+            advice = [
+    "Air quality is excellent.",
+    "Outdoor activities are completely safe.",
+    "No mask is generally required.",
+    "Ideal for walking and exercise.",
+    "Keep monitoring AQI regularly."
+]
 
         elif prediction <= 100:
             category = "🟡 Satisfactory"
             color = "#8BC34A"
-            advice = "Air quality is acceptable for most people."
+            advice = [
+    "Air quality is acceptable.",
+    "Outdoor activities are generally safe.",
+    "Sensitive individuals should stay alert.",
+    "Drink enough water.",
+    "Continue monitoring pollution levels."
+]
 
         elif prediction <= 200:
             category = "🟠 Moderate"
             color = "orange"
-            advice = "Sensitive people should reduce prolonged outdoor activity."
+            advice = [
+    "Sensitive individuals should reduce prolonged outdoor exposure.",
+    "Avoid heavy outdoor exercise.",
+    "Children and elderly should take extra care.",
+    "Wear a mask if pollution increases.",
+    "Keep windows closed during peak pollution."
+]
 
         elif prediction <= 300:
             category = "🔴 Poor"
             color = "red"
-            advice = "Avoid long outdoor exposure."
+            advice = [
+    "Limit outdoor activities.",
+    "Wear an N95 mask while outside.",
+    "People with asthma should be cautious.",
+    "Children and elderly should stay indoors.",
+    "Use air purifiers if available."
+]
 
         elif prediction <= 400:
             category = "🟣 Very Poor"
             color = "purple"
-            advice = "Wear a mask and avoid outdoor activities."
+            advice = [
+    "Avoid outdoor activities.",
+    "Wear a certified N95 mask.",
+    "Keep doors and windows closed.",
+    "Use indoor air purification.",
+    "Consult a doctor if breathing discomfort occurs."
+]
 
         else:
             category = "⚫ Severe"
             color = "#5D1049"
-            advice = "Stay indoors. Outdoor activities are not recommended."
+            advice = [
+    "Stay indoors as much as possible.",
+    "Avoid all outdoor exercise.",
+    "Wear an N95 mask if going outside is unavoidable.",
+    "Children, elderly and patients should remain indoors.",
+    "Follow local pollution advisories."
+]
 
-        st.success("Prediction Completed Successfully")
+            st.success("✅ Prediction Completed Successfully")
 
-        c1, c2 = st.columns(2)
-
-        with c1:
-            st.metric("Predicted AQI", prediction)
-
-        with c2:
-            st.metric("AQI Category", category)
-
-        st.markdown("---")
+        st.markdown("## 🌍 AQI Status")
 
         st.markdown(
             f"""
             <div style="
             background:{color};
-            padding:20px;
-            border-radius:12px;
+            padding:25px;
+            border-radius:15px;
             color:white;
             text-align:center;
-            font-size:22px;
-            font-weight:bold;
+            box-shadow:0px 4px 10px rgba(0,0,0,0.15);
             ">
-            {category}
+
+            <h2>Predicted AQI</h2>
+
+            <h1 style="font-size:55px;">{prediction}</h1>
+
+            <h2>{category}</h2>
+
             </div>
             """,
             unsafe_allow_html=True
         )
 
-        st.markdown("### ❤️ Health Recommendation")
-        st.info(advice)
+        st.divider()
+
+        st.subheader("❤️ Health Advisory")
+
+        for tip in advice:
+            st.write("•", tip)
+
+        st.divider()
+
+        st.subheader("📋 Prediction Summary")
+
+        c1, c2 = st.columns(2)
+
+        with c1:
+            st.metric("Model Used", "XGBoost")
+
+        with c2:
+            st.metric("Input Features", "9")
+
+        st.caption(
+            "Prediction generated using the trained XGBoost regression model."
+        )
+
+        st.caption(
+            f"Prediction Time: {datetime.now().strftime('%d-%m-%Y %I:%M %p')}"
+        )
+
+        st.divider()
+
+        st.subheader("📊 AQI Classification Scale")
+
+        st.markdown("""
+🟢 **Good** : 0 – 50
+
+🟡 **Satisfactory** : 51 – 100
+
+🟠 **Moderate** : 101 – 200
+
+🔴 **Poor** : 201 – 300
+
+🟣 **Very Poor** : 301 – 400
+
+⚫ **Severe** : 401+
+""")
+
+        
 # ==========================================================
 # ABOUT PAGE
 # ==========================================================
