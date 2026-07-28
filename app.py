@@ -651,6 +651,73 @@ elif page == "🤖 Prediction":
         st.caption(
             f"Prediction Time: {datetime.now().strftime('%d-%m-%Y %I:%M %p')}"
         )
+        st.divider()
+
+        st.subheader("🎯 Prediction Reliability")
+
+        # Training dataset ranges
+        training_ranges = {
+            "PM2.5": (60, 158),
+            "PM10": (125, 300),
+            "NO2": (15, 44),
+            "SO2": (5, 11),
+            "NH3": (15, 39),
+            "O3": (15, 29),
+            "Temperature": (21.8, 26.2),
+            "Humidity": (70, 80),
+            "Wind Speed": (1.3, 2.2)
+        }
+
+        input_values = {
+            "PM2.5": pm25,
+            "PM10": pm10,
+            "NO2": no2,
+            "SO2": so2,
+            "NH3": nh3,
+            "O3": o3,
+            "Temperature": temperature,
+            "Humidity": humidity,
+            "Wind Speed": wind_speed
+        }
+
+        outside_count = 0
+        boundary_count = 0
+
+        for feature, value in input_values.items():
+
+            min_val, max_val = training_ranges[feature]
+
+            if value < min_val or value > max_val:
+                outside_count += 1
+
+            elif (
+                value <= min_val + (max_val - min_val) * 0.10
+                or value >= max_val - (max_val - min_val) * 0.10
+            ):
+                boundary_count += 1
+
+        # Prediction Reliability
+        if outside_count == 0 and boundary_count == 0:
+
+            st.success(
+                "🟢 Prediction Reliability : HIGH\n\n"
+                "All input values are within the training dataset range."
+            )
+
+        elif outside_count == 0:
+
+            st.warning(
+                "🟡 Prediction Reliability : MEDIUM\n\n"
+                "Some input values are close to the training dataset boundaries."
+            )
+
+        else:
+
+            st.error(
+                "🔴 Prediction Reliability : LOW\n\n"
+                "Some input values are outside the training dataset range.\n"
+                "Prediction may be less reliable."
+            )
 
         st.divider()
 
