@@ -7,6 +7,7 @@ import pandas as pd
 import os
 from datetime import datetime
 
+
 # ==========================================================
 # PAGE CONFIGURATION
 # ==========================================================
@@ -712,8 +713,50 @@ if st.button("🔮 Predict AQI", use_container_width=True):
 
         st.divider()
 
-        st.subheader("❤️ Health Advisory")
+        st.subheader("🌡 AQI Gauge Meter")
 
+        gauge = go.Figure(
+            go.Indicator(
+                mode="gauge+number",
+                value=prediction,
+                title={"text": "AQI Severity Level"},
+                gauge={
+                    "axis": {"range": [0, 500]},
+                    "bar": {"color": color},
+                    "steps": [
+                        {"range": [0, 50], "color": "#4CAF50"},
+                        {"range": [50, 100], "color": "#CDDC39"},
+                        {"range": [100, 200], "color": "#FFC107"},
+                        {"range": [200, 300], "color": "#F44336"},
+                        {"range": [300, 400], "color": "#9C27B0"},
+                        {"range": [400, 500], "color": "#6A1B9A"}
+                    ]
+                }
+            )
+        )
+
+        gauge.update_layout(
+            height=300,
+            margin=dict(l=20, r=20, t=40, b=20)
+        )
+
+        st.plotly_chart(gauge, use_container_width=True)
+        st.markdown(
+    f"""
+    <div style="
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+    ">
+    Current Status: {category}
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+        st.divider()
+
+        st.subheader("❤️ Health Advisory")
         for tip in advice:
             st.write("•", tip)
 
