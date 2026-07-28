@@ -737,6 +737,58 @@ elif page == "🤖 Prediction":
 ⚫ **Severe** : 401+
 """)
 
+        st.divider()
+
+        st.subheader("📊 Main Contributors")
+
+        feature_names = [
+            "PM2.5",
+            "PM10",
+            "NO₂",
+            "SO₂",
+            "NH₃",
+            "O₃",
+            "Temperature",
+            "Humidity",
+            "Wind Speed"
+        ]
+
+        importance_df = pd.DataFrame({
+            "Feature": feature_names,
+            "Importance": model.feature_importances_
+        })
+
+        importance_df = importance_df.sort_values(
+            by="Importance",
+            ascending=False
+        )
+
+        fig = px.bar(
+            importance_df,
+            x="Importance",
+            y="Feature",
+            orientation="h",
+            color="Importance",
+            color_continuous_scale="Greens",
+            text="Importance",
+            template="plotly_white"
+        )
+
+        fig.update_traces(
+            texttemplate="%{text:.3f}",
+            textposition="outside"
+        )
+
+        fig.update_layout(
+            yaxis=dict(categoryorder="total ascending"),
+            coloraxis_showscale=False,
+            xaxis_title="Feature Importance",
+            yaxis_title="",
+            height=450
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
         
 # ==========================================================
 # ABOUT PAGE
