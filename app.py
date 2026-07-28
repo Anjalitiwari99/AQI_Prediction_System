@@ -415,12 +415,184 @@ elif page=="📈 Visualizations":
 # PREDICTION PAGE
 # ==========================================================
 
-elif page=="🤖 Prediction":
+# ==========================================================
+# PREDICTION PAGE
+# ==========================================================
+
+elif page == "🤖 Prediction":
 
     st.title("🤖 AQI Prediction")
 
-    st.info("Coming in Part 3")
+    if not model_loaded:
+        st.error("XGBoost Model Not Found")
+        st.stop()
 
+    st.success("Prediction Model Loaded Successfully")
+
+    st.divider()
+
+    st.subheader("Enter Air Quality Parameters")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        pm25 = st.number_input(
+            "PM2.5 (µg/m³)",
+            min_value=0,
+            max_value=500,
+            value=100,
+            step=1
+        )
+
+        pm10 = st.number_input(
+            "PM10 (µg/m³)",
+            min_value=0,
+            max_value=600,
+            value=200,
+            step=1
+        )
+
+        no2 = st.number_input(
+            "NO2 (µg/m³)",
+            min_value=0,
+            max_value=300,
+            value=35,
+            step=1
+        )
+
+        so2 = st.number_input(
+            "SO2 (µg/m³)",
+            min_value=0,
+            max_value=200,
+            value=10,
+            step=1
+        )
+
+        nh3 = st.number_input(
+            "NH3 (µg/m³)",
+            min_value=0,
+            max_value=200,
+            value=30,
+            step=1
+        )
+
+    with col2:
+
+        o3 = st.number_input(
+            "O3 (µg/m³)",
+            min_value=0,
+            max_value=300,
+            value=20,
+            step=1
+        )
+
+        temperature = st.number_input(
+            "Temperature (°C)",
+            min_value=-10,
+            max_value=60,
+            value=25,
+            step=1
+        )
+
+        humidity = st.number_input(
+            "Humidity (%)",
+            min_value=0,
+            max_value=100,
+            value=70,
+            step=1
+        )
+
+        wind_speed = st.number_input(
+            "Wind Speed (m/s)",
+            min_value=0,
+            max_value=30,
+            value=2,
+            step=1
+        )
+
+    st.divider()
+
+    if st.button("🔮 Predict AQI", use_container_width=True):
+
+        input_data = np.array([[
+            pm25,
+            pm10,
+            no2,
+            so2,
+            nh3,
+            o3,
+            temperature,
+            humidity,
+            wind_speed
+        ]])
+
+        prediction = model.predict(input_data)[0]
+        prediction = round(float(prediction), 2)
+
+        # AQI Category
+
+        if prediction <= 50:
+            category = "🟢 Good"
+            color = "green"
+            advice = "Air quality is excellent. Enjoy outdoor activities."
+
+        elif prediction <= 100:
+            category = "🟡 Satisfactory"
+            color = "#8BC34A"
+            advice = "Air quality is acceptable for most people."
+
+        elif prediction <= 200:
+            category = "🟠 Moderate"
+            color = "orange"
+            advice = "Sensitive people should reduce prolonged outdoor activity."
+
+        elif prediction <= 300:
+            category = "🔴 Poor"
+            color = "red"
+            advice = "Avoid long outdoor exposure."
+
+        elif prediction <= 400:
+            category = "🟣 Very Poor"
+            color = "purple"
+            advice = "Wear a mask and avoid outdoor activities."
+
+        else:
+            category = "⚫ Severe"
+            color = "#5D1049"
+            advice = "Stay indoors. Outdoor activities are not recommended."
+
+        st.success("Prediction Completed Successfully")
+
+        c1, c2 = st.columns(2)
+
+        with c1:
+            st.metric("Predicted AQI", prediction)
+
+        with c2:
+            st.metric("AQI Category", category)
+
+        st.markdown("---")
+
+        st.markdown(
+            f"""
+            <div style="
+            background:{color};
+            padding:20px;
+            border-radius:12px;
+            color:white;
+            text-align:center;
+            font-size:22px;
+            font-weight:bold;
+            ">
+            {category}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        st.markdown("### ❤️ Health Recommendation")
+        st.info(advice)
 # ==========================================================
 # ABOUT PAGE
 # ==========================================================
@@ -431,7 +603,7 @@ elif page=="ℹ About":
 
     st.write("AQI Prediction System")
 
-    st.write("Machine Learning Model : XGBoost")
+    st.write("Machine Learning Model : Random Forest & XGBoost")
 
     st.write("Framework : Streamlit")
 
