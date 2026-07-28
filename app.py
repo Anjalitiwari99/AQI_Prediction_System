@@ -416,9 +416,7 @@ elif page=="📈 Visualizations":
 # PREDICTION PAGE
 # ==========================================================
 
-# ==========================================================
-# PREDICTION PAGE
-# ==========================================================
+
 
 elif page == "🤖 Prediction":
 
@@ -432,89 +430,176 @@ elif page == "🤖 Prediction":
 
     st.divider()
 
+    
+    # ==========================================================
+# ==========================================================
+# QUICK DEMO MODE
+# ==========================================================
+
     st.subheader("Enter Air Quality Parameters")
 
-    col1, col2 = st.columns(2)
+    st.info(
+    "🧪 **Quick Demo Mode**\n\n"
+    "Select a pre-defined air quality scenario to automatically fill realistic input values for demonstration and testing."
+)
 
-    with col1:
+    
+    st.markdown("**Available Sample Scenarios**")
 
-        pm25 = st.number_input(
-            "PM2.5 (µg/m³)",
-            min_value=0,
-            max_value=500,
-            value=100,
-            step=1
-        )
+scenario = st.selectbox(
+    "",
+    [
+        "✍️ Custom Manual Input",
+        "🟠 Moderate Air (Typical City Day)",
+        "🔴 Poor Air (High Pollution)",
+        "🟣 High Pollution (Near Dataset Maximum)",
+        "🟢 Good Air (Demo Only)",
+        "🟡 Satisfactory Air (Demo Only)",
+        "⚫ Severe Air (Demo Only)"
+    ]
+)
 
-        pm10 = st.number_input(
-            "PM10 (µg/m³)",
-            min_value=0,
-            max_value=600,
-            value=200,
-            step=1
-        )
+st.caption(
+    "💡 Note: Some sample scenarios are for demonstration only because they are outside the model's training data."
+)
 
-        no2 = st.number_input(
-            "NO2 (µg/m³)",
-            min_value=0,
-            max_value=300,
-            value=35,
-            step=1
-        )
+# ==========================================================
+# SAMPLE VALUES
+# ==========================================================
 
-        so2 = st.number_input(
-            "SO2 (µg/m³)",
-            min_value=0,
-            max_value=200,
-            value=10,
-            step=1
-        )
+samples = {
 
-        nh3 = st.number_input(
-            "NH3 (µg/m³)",
-            min_value=0,
-            max_value=200,
-            value=30,
-            step=1
-        )
+    "✍️ Custom Manual Input":
+    dict(pm25=0, pm10=0, no2=0, so2=0, nh3=0,
+         o3=0, temperature=0, humidity=0, wind_speed=0),
 
-    with col2:
+    "🟢 Good Air (Demo Only)":
+    dict(pm25=25, pm10=45, no2=18, so2=6, nh3=18,
+         o3=18, temperature=24, humidity=72, wind_speed=2),
 
-        o3 = st.number_input(
-            "O3 (µg/m³)",
-            min_value=0,
-            max_value=300,
-            value=20,
-            step=1
-        )
+    "🟡 Satisfactory Air (Demo Only)":
+    dict(pm25=45, pm10=80, no2=25, so2=7, nh3=22,
+         o3=20, temperature=25, humidity=73, wind_speed=2),
 
-        temperature = st.number_input(
-            "Temperature (°C)",
-            min_value=-10,
-            max_value=60,
-            value=25,
-            step=1
-        )
+    "🟠 Moderate Air (Typical City Day)":
+    dict(pm25=100, pm10=200, no2=35, so2=10, nh3=30,
+         o3=20, temperature=25, humidity=70, wind_speed=2),
 
-        humidity = st.number_input(
-            "Humidity (%)",
-            min_value=0,
-            max_value=100,
-            value=70,
-            step=1
-        )
+    "🔴 Poor Air (High Pollution)":
+    dict(pm25=145, pm10=275, no2=42, so2=11, nh3=36,
+         o3=26, temperature=26, humidity=75, wind_speed=1),
 
-        wind_speed = st.number_input(
-            "Wind Speed (m/s)",
-            min_value=0,
-            max_value=30,
-            value=2,
-            step=1
-        )
+    "🟣 High Pollution (Near Dataset Maximum)":
+    dict(pm25=158, pm10=300, no2=44, so2=11, nh3=39,
+         o3=29, temperature=26, humidity=80, wind_speed=1),
 
-    st.divider()
+    "⚫ Severe Air (Demo Only)":
+    dict(pm25=220, pm10=420, no2=60, so2=18, nh3=50,
+         o3=40, temperature=30, humidity=82, wind_speed=1)
 
-    if st.button("🔮 Predict AQI", use_container_width=True):
+}
+
+values = samples[scenario]
+
+if scenario in [
+    "🟠 Moderate Air (Typical City Day)",
+    "🔴 Poor Air (High Pollution)",
+    "🟣 High Pollution (Near Dataset Maximum)"
+]:
+    st.success(f"✅ '{scenario}' sample loaded successfully.")
+
+elif scenario in [
+    "🟢 Good Air (Demo Only)",
+    "🟡 Satisfactory Air (Demo Only)",
+    "⚫ Severe Air (Demo Only)"
+]:
+    st.warning(
+        "⚠️ This scenario is outside the model's training dataset.\n\n"
+        "The model was trained on AQI values approximately between 120 and 275.\n"
+        "Predictions for this scenario may not match the selected AQI category."
+    )
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    pm25 = st.number_input(
+        "PM2.5 (µg/m³)",
+        min_value=0.0,
+        max_value=500.0,
+        value=float(values["pm25"]),
+        step=1.0
+    )
+
+    pm10 = st.number_input(
+        "PM10 (µg/m³)",
+        min_value=0.0,
+        max_value=600.0,
+        value=float(values["pm10"]),
+        step=1.0
+    )
+
+    no2 = st.number_input(
+        "NO2 (µg/m³)",
+        min_value=0.0,
+        max_value=300.0,
+        value=float(values["no2"]),
+        step=1.0
+    )
+
+    so2 = st.number_input(
+        "SO2 (µg/m³)",
+        min_value=0.0,
+        max_value=200.0,
+        value=float(values["so2"]),
+        step=1.0
+    )
+
+    nh3 = st.number_input(
+        "NH3 (µg/m³)",
+        min_value=0.0,
+        max_value=200.0,
+        value=float(values["nh3"]),
+        step=1.0
+    )
+
+with col2:
+
+    o3 = st.number_input(
+        "O3 (µg/m³)",
+        min_value=0.0,
+        max_value=300.0,
+        value=float(values["o3"]),
+        step=1.0
+    )
+
+    temperature = st.number_input(
+        "Temperature (°C)",
+        min_value=-10.0,
+        max_value=60.0,
+        value=float(values["temperature"]),
+        step=1.0
+    )
+
+    humidity = st.number_input(
+        "Humidity (%)",
+        min_value=0.0,
+        max_value=100.0,
+        value=float(values["humidity"]),
+        step=1.0
+    )
+
+    wind_speed = st.number_input(
+        "Wind Speed (m/s)",
+        min_value=0.0,
+        max_value=30.0,
+        value=float(values["wind_speed"]),
+        step=1.0
+    )
+
+st.divider()
+
+if st.button("🔮 Predict AQI", use_container_width=True):
 
         input_data = np.array([[
             pm25,
