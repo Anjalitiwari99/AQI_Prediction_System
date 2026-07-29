@@ -94,7 +94,7 @@ except Exception as e:
 # SIDEBAR
 # ==========================================================
 
-st.sidebar.title("🌿 Navigation")
+st.sidebar.title("🧭 Navigation")
 
 page = st.sidebar.radio(
     "Go To", ["🏠 Home", "📊 Dataset", "📈 Visualizations", "🤖 Prediction", "ℹ About"]
@@ -107,6 +107,74 @@ st.sidebar.success("Model : Random Forest & XGBoost")
 st.sidebar.markdown("---")
 
 st.sidebar.caption("AQI Prediction System")
+
+# ==========================================================
+# SIDEBAR EXTRA INFORMATION
+# ==========================================================
+
+st.sidebar.markdown("---")
+
+st.sidebar.info(
+"""
+🌍 **Project Focus**
+
+Air Quality Monitoring
+
+AI Based AQI Prediction
+
+Data Driven Insights
+"""
+)
+
+
+st.sidebar.success(
+"""
+🤖 **Technology Stack**
+
+🐍 Python
+
+📊 Data Analytics
+
+🧠 Machine Learning
+
+⚡ XGBoost Model
+"""
+)
+
+
+st.sidebar.markdown("---")
+
+
+st.sidebar.markdown(
+"""
+<div style="
+background:#e8f5e9;
+padding:15px;
+border-radius:12px;
+text-align:center;
+">
+
+<h4 style="color:#2e7d32;">
+🌱 Smart Environment
+</h4>
+
+<p style="font-size:13px;">
+Predict Air Quality<br>
+Protect Health<br>
+Build Awareness
+</p>
+
+</div>
+""",
+unsafe_allow_html=True
+)
+
+
+st.sidebar.markdown("---")
+
+st.sidebar.caption(
+"💚 AI for Cleaner Tomorrow"
+)
 
 # ==========================================================
 # CHAPTER 1 : HERO SECTION
