@@ -7,6 +7,8 @@ import pandas as pd
 import os
 from datetime import datetime
 from PIL import Image
+from pathlib import Path
+import base64
 
 st.markdown(
     """
@@ -107,94 +109,414 @@ st.sidebar.markdown("---")
 st.sidebar.caption("AQI Prediction System")
 
 # ==========================================================
-# HOME PAGE
+# CHAPTER 1 : HERO SECTION
 # ==========================================================
 
 if page == "🏠 Home":
 
-    st.title("🌍 AQI Prediction System")
+    hero_image = Image.open("Images/Prayagraj_Hero_image.png")
 
-    st.subheader("Machine Learning Based Air Quality Intelligence Dashboard")
+    st.image(hero_image, use_container_width=True)
 
-    st.markdown("""
-Predict • Analyze • Visualize • Protect
-""")
+    st.markdown("<br>", unsafe_allow_html=True)
 
-    st.divider()
+    # ==========================================================
+    # CHAPTER 2 : WHY THIS PLATFORM?
+    # ==========================================================
 
-    if data_loaded:
+    st.markdown("<br>", unsafe_allow_html=True)
 
-        rows = df.shape[0]
-        cols = df.shape[1]
+    st.markdown(
+        """
+    <h2 style="
+    text-align:center;
+    color:#2e7d32;
+    font-size:34px;
+    margin-bottom:30px;
+    ">
+    🌿 Why This Platform?
+    </h2>
+    """,
+        unsafe_allow_html=True,
+    )
 
-        avg_aqi = round(df["AQI"].mean(), 2)
-
-        max_aqi = round(df["AQI"].max(), 2)
-
-    else:
-
-        rows = 0
-        cols = 0
-        avg_aqi = 0
-        max_aqi = 0
-
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3 = st.columns(3)
 
     with c1:
-        st.metric("Records", rows)
+        st.success("""
+    ### 📂 Real Dataset
+
+    ✔ Prayagraj Air Quality Dataset
+
+    ✔ Cleaned & Preprocessed
+
+    ✔ Reliable Environmental Data
+    """)
 
     with c2:
-        st.metric("Features", cols)
+        st.info("""
+    ### 🤖 AI Powered
+
+    ✔ Random Forest Model
+
+    ✔ XGBoost Model
+
+    ✔ Intelligent AQI Prediction
+    """)
 
     with c3:
-        st.metric("Average AQI", avg_aqi)
+        st.warning("""
+    ### 📊 Interactive Dashboard
 
-    with c4:
-        st.metric("Maximum AQI", max_aqi)
+    ✔ Visual Analytics
 
-    st.divider()
+    ✔ AQI Prediction
+
+    ✔ User-Friendly Interface
+    """)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ==========================================================
+    # CHAPTER 4 : WHY AQI MATTERS
+    # ==========================================================
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    st.markdown(
+        """
+    <h2 style="
+    text-align:center;
+    color:#2e7d32;
+    font-size:34px;
+    margin-bottom:25px;
+    ">
+    🌍 Why AQI Matters?
+    </h2>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    left, right = st.columns([1.4, 1])
+
+    with left:
+
+        st.markdown("""
+    Air pollution is one of the world's biggest environmental challenges.
+
+    Monitoring the **Air Quality Index (AQI)** helps citizens understand pollution levels and take precautions before health conditions become serious.
+
+    This dashboard combines **Machine Learning**, **Data Analytics**, and **Interactive Visualization** to provide meaningful AQI insights for Prayagraj.
+    """)
+
+    with right:
+
+        st.success("🌿 **Good (0–50)**\n\nFresh and healthy air.")
+
+        st.info("🟡 **Moderate (51–100)**\n\nAcceptable for most people.")
+
+        st.warning("🟠 **Poor (101–200)**\n\nSensitive groups should be careful.")
+
+        st.error("🔴 **Unhealthy (201+)**\n\nHealth risks increase significantly.")
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ==========================================================
+    # CHAPTER 5 : DID YOU KNOW?
+    # ==========================================================
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    st.markdown(
+        """
+    <h2 style="
+    text-align:center;
+    color:#2e7d32;
+    font-size:34px;
+    margin-bottom:30px;
+    ">
+    💡 Did You Know?
+    </h2>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        st.info("""
+    🌿 **Fact 1**
+
+    Air pollution is responsible for millions of premature deaths worldwide every year.
+    """)
+
+        st.success("""
+    🍃 **Fact 2**
+
+    An AQI below **50** indicates clean and healthy air for everyone.
+    """)
+
+    with col2:
+
+        st.warning("""
+    🌫 **Fact 3**
+
+    Machine Learning can identify pollution patterns and help predict future AQI levels.
+    """)
+
+        st.error("""
+    🚨 **Fact 4**
+
+    People with asthma and heart disease are more vulnerable when AQI exceeds **200**.
+    """)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ==========================================================
+    # CHAPTER 6 : ABOUT THIS SYSTEM
+    # ==========================================================
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    st.markdown(
+        """
+    <div style="
+    background:linear-gradient(135deg,#ffffff,#f8fff8);
+    padding:28px;
+    border-radius:20px;
+    border:1px solid #dcedc8;
+    box-shadow:0px 6px 18px rgba(0,0,0,0.08);
+    ">
+
+    <h2 style="
+    color:#2e7d32;
+    margin-bottom:15px;
+    ">
+    📘 About This System
+    </h2>
+
+    <p style="
+    font-size:17px;
+    color:#555;
+    line-height:1.8;
+    text-align:justify;
+    ">
+
+    This AI-powered dashboard analyzes the
+    Prayagraj Air Quality Dataset to predict the
+    Air Quality Index (AQI) using Machine Learning.
+
+    The platform combines intelligent prediction,
+    interactive visualization and environmental
+    awareness to help users better understand
+    air pollution trends and make informed decisions.
+
+    </p>
+
+    </div>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ==========================================================
+    # 📊 PREMIUM PROJECT STATISTICS
+    # ==========================================================
+
+    st.markdown(
+        """
+        <h2 style="
+        text-align:center;
+        color:#2e7d32;
+        margin-top:20px;
+        margin-bottom:25px;
+        ">
+        📊 Project Statistics
+        </h2>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # ----------------------------
+    # Calculate Statistics
+    # ----------------------------
 
     if data_loaded:
 
-        st.success("Dataset Loaded Successfully ✅")
+        total_records = df.shape[0]
+        total_features = df.shape[1]
+        average_aqi = round(df["AQI"].mean(), 2)
+        maximum_aqi = round(df["AQI"].max(), 2)
 
     else:
 
-        st.error("Dataset Not Found")
+        total_records = 0
+        total_features = 0
+        average_aqi = 0
+        maximum_aqi = 0
 
-    st.markdown("## About Project")
+    # ----------------------------
+    # Statistics Cards
+    # ----------------------------
 
-    st.write("""
-This project predicts Air Quality Index (AQI)
-using Machine Learning.
+    col1, col2, col3, col4 = st.columns(4)
 
-The prediction model has been trained using
-Prayagraj Air Quality Dataset.
+    with col1:
 
-The objective of this dashboard is to help users
-understand air pollution levels through data
-analysis and intelligent prediction.
-""")
+        st.metric(label="📄 Dataset Records", value=f"{total_records:,}")
+
+    with col2:
+
+        st.metric(label="🧪 Prediction Inputs", value="9")
+
+    with col3:
+
+        st.metric(label="🤖 ML Models", value="2")
+
+    with col4:
+
+        st.metric(label="📈 Average AQI", value=average_aqi)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ----------------------------
+    # More Details
+    # ----------------------------
+
+    with st.expander("🔍 View Complete Project Statistics"):
+
+        st.markdown(f"""
+    ### 📊 Dataset Summary
+
+    - 📄 **Total Records:** {total_records:,}
+    - 📑 **Total Columns:** {total_features}
+    - 🧪 **Prediction Inputs:** 9
+    - 🤖 **Machine Learning Models:** 2
+    - 📈 **Average AQI:** {average_aqi}
+    - 🚨 **Maximum AQI:** {maximum_aqi}
+
+    ---
+
+    ### 🌿 Prediction Input Parameters
+
+    - PM2.5
+    - PM10
+    - NO₂
+    - SO₂
+    - NH₃
+    - O₃
+    - Temperature
+    - Humidity
+    - Wind Speed
+
+    ---
+
+    ### 🤖 Models Used
+
+    ✅ Random Forest Regressor
+
+    ✅ XGBoost Regressor
+
+    ---
+
+    ### 🎯 Purpose
+
+    This AI-powered dashboard analyzes environmental parameters and predicts the Air Quality Index (AQI) for better environmental awareness and decision making.
+
+    """)
+
+        # ==========================================================
+    # PROFESSIONAL FOOTER
+    # ==========================================================
+
+    from datetime import datetime
 
     st.divider()
 
-    st.info("""
-🌿 Features
+    st.markdown(
+        """
+        <div style="
+        background:#f8fff8;
+        border:1px solid #dcedc8;
+        border-radius:18px;
+        padding:28px;
+        text-align:center;
+        box-shadow:0px 4px 15px rgba(0,0,0,0.06);
+        ">
 
-• Dataset Overview
+        <h3 style="
+        color:#2e7d32;
+        margin-bottom:8px;
+        ">
+        🌿 AQI Prediction System
+        </h3>
 
-• Interactive Visualizations
+        <p style="
+        color:#555;
+        font-size:16px;
+        margin-bottom:18px;
+        ">
+        AI-Powered Air Quality Prediction Platform for
+        Prayagraj, Uttar Pradesh
+        </p>
 
-• AQI Prediction
+        <hr style="
+        border:0.5px solid #dcedc8;
+        ">
 
-• Health Awareness
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-• Machine Learning Model
-""")
+    # -----------------------------
+    # Footer Information
+    # -----------------------------
 
-    st.divider()
+    c1, c2, c3 = st.columns(3)
 
-    st.caption("Version 1.0")
+    with c1:
+        st.markdown("### 👩‍💻 Developer")
+        st.write("**Anjali Tiwari**")
+        st.caption("B.Tech CSE (Data Science)")
+
+    with c2:
+        st.markdown("### 🤖 Technology")
+        st.write("Random Forest")
+        st.write("XGBoost")
+        st.caption("Machine Learning")
+
+    with c3:
+        st.markdown("### 📅 Project Info")
+        st.write("**Version : 1.0**")
+        st.write(f"Last Updated : {datetime.now().strftime('%d %B %Y')}")
+        st.caption("Streamlit Dashboard")
+
+    st.markdown("---")
+
+    st.markdown(
+        """
+        <div style="
+        text-align:center;
+        color:#666;
+        font-size:15px;
+        line-height:1.8;
+        ">
+
+        ❤️ Built with <b>Python</b>, <b>Streamlit</b>,
+        <b>Machine Learning</b> & <b>Data Analytics</b>
+
+        <br><br>
+
+        © 2026 <b>Anjali Tiwari</b> • All Rights Reserved
+
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
 
 # ==========================================================
 # DATASET PAGE
@@ -213,6 +535,93 @@ elif page == "📊 Dataset":
     else:
 
         st.error("Dataset Not Found")
+
+    # ==========================================================
+    # CHAPTER 8 : DATASET STATUS
+    # ==========================================================
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    st.markdown(
+        """
+    <h2 style="
+    text-align:center;
+    color:#2e7d32;
+    font-size:32px;
+    margin-bottom:25px;
+    ">
+    📂 Dataset Status
+    </h2>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    if data_loaded:
+
+        st.markdown(
+            """
+        <div style="
+        background:linear-gradient(135deg,#f1f8e9,#ffffff);
+        border:1px solid #c8e6c9;
+        border-radius:18px;
+        padding:22px;
+        text-align:center;
+        box-shadow:0px 5px 15px rgba(0,0,0,0.08);
+        ">
+
+        <h3 style="color:#2e7d32;">
+        ✅ Dataset Successfully Loaded
+        </h3>
+
+        <p style="
+        color:#555;
+        font-size:17px;
+        line-height:1.7;
+        ">
+
+        Prayagraj Air Quality Dataset is ready for
+        visualization, analysis and AQI prediction.
+
+        </p>
+
+        </div>
+        """,
+            unsafe_allow_html=True,
+        )
+
+    else:
+
+        st.markdown(
+            """
+        <div style="
+        background:#fff8f8;
+        border:1px solid #ffcdd2;
+        border-radius:18px;
+        padding:22px;
+        text-align:center;
+        box-shadow:0px 5px 15px rgba(0,0,0,0.08);
+        ">
+
+        <h3 style="color:#c62828;">
+        ❌ Dataset Not Found
+        </h3>
+
+        <p style="
+        color:#666;
+        font-size:17px;
+        ">
+
+        Please check the dataset file path and reload
+        the application.
+
+        </p>
+
+        </div>
+        """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("<br>", unsafe_allow_html=True)
 
 # ==========================================================
 # VISUALIZATION PAGE
