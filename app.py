@@ -6,23 +6,28 @@ import streamlit as st
 import pandas as pd
 import os
 from datetime import datetime
+from PIL import Image
 
+st.markdown(
+    """
+<link rel="stylesheet" 
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+""",
+    unsafe_allow_html=True,
+)
 
 # ==========================================================
 # PAGE CONFIGURATION
 # ==========================================================
 
-st.set_page_config(
-    page_title="AQI Prediction System",
-    page_icon="🌿",
-    layout="wide"
-)
+st.set_page_config(page_title="AQI Prediction System", page_icon="🌿", layout="wide")
 
 # ==========================================================
 # CUSTOM CSS
 # ==========================================================
 
-st.markdown("""
+st.markdown(
+    """
 <style>
 
 .stApp{
@@ -54,7 +59,9 @@ footer{
 }
 
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # ==========================================================
 # LOAD DATASET
@@ -88,14 +95,7 @@ except Exception as e:
 st.sidebar.title("🌿 Navigation")
 
 page = st.sidebar.radio(
-    "Go To",
-    [
-        "🏠 Home",
-        "📊 Dataset",
-        "📈 Visualizations",
-        "🤖 Prediction",
-        "ℹ About"
-    ]
+    "Go To", ["🏠 Home", "📊 Dataset", "📈 Visualizations", "🤖 Prediction", "ℹ About"]
 )
 
 st.sidebar.markdown("---")
@@ -110,17 +110,15 @@ st.sidebar.caption("AQI Prediction System")
 # HOME PAGE
 # ==========================================================
 
-if page=="🏠 Home":
+if page == "🏠 Home":
 
     st.title("🌍 AQI Prediction System")
 
     st.subheader("Machine Learning Based Air Quality Intelligence Dashboard")
 
-    st.markdown(
-        """
+    st.markdown("""
 Predict • Analyze • Visualize • Protect
-"""
-    )
+""")
 
     st.divider()
 
@@ -129,42 +127,30 @@ Predict • Analyze • Visualize • Protect
         rows = df.shape[0]
         cols = df.shape[1]
 
-        avg_aqi = round(df["AQI"].mean(),2)
+        avg_aqi = round(df["AQI"].mean(), 2)
 
-        max_aqi = round(df["AQI"].max(),2)
+        max_aqi = round(df["AQI"].max(), 2)
 
     else:
 
-        rows=0
-        cols=0
-        avg_aqi=0
-        max_aqi=0
+        rows = 0
+        cols = 0
+        avg_aqi = 0
+        max_aqi = 0
 
-    c1,c2,c3,c4 = st.columns(4)
+    c1, c2, c3, c4 = st.columns(4)
 
     with c1:
-        st.metric(
-            "Records",
-            rows
-        )
+        st.metric("Records", rows)
 
     with c2:
-        st.metric(
-            "Features",
-            cols
-        )
+        st.metric("Features", cols)
 
     with c3:
-        st.metric(
-            "Average AQI",
-            avg_aqi
-        )
+        st.metric("Average AQI", avg_aqi)
 
     with c4:
-        st.metric(
-            "Maximum AQI",
-            max_aqi
-        )
+        st.metric("Maximum AQI", max_aqi)
 
     st.divider()
 
@@ -214,7 +200,7 @@ analysis and intelligent prediction.
 # DATASET PAGE
 # ==========================================================
 
-elif page=="📊 Dataset":
+elif page == "📊 Dataset":
 
     st.title("📊 Dataset")
 
@@ -232,7 +218,7 @@ elif page=="📊 Dataset":
 # VISUALIZATION PAGE
 # ==========================================================
 
-elif page=="📈 Visualizations":
+elif page == "📈 Visualizations":
 
     st.title("📈 AQI Data Visualizations")
 
@@ -248,10 +234,7 @@ elif page=="📈 Visualizations":
 
     locations = ["All Locations"] + sorted(df["Location"].unique().tolist())
 
-    selected_location = st.selectbox(
-        "Select Location",
-        locations
-    )
+    selected_location = st.selectbox("Select Location", locations)
 
     if selected_location != "All Locations":
         filtered_df = df[df["Location"] == selected_location]
@@ -271,7 +254,7 @@ elif page=="📈 Visualizations":
         x="AQI",
         nbins=30,
         color_discrete_sequence=["green"],
-        template="plotly_white"
+        template="plotly_white",
     )
 
     st.plotly_chart(fig, use_container_width=True)
@@ -292,11 +275,7 @@ elif page=="📈 Visualizations":
     )
 
     fig = px.bar(
-        avg_location,
-        x="Location",
-        y="AQI",
-        color="AQI",
-        template="plotly_white"
+        avg_location, x="Location", y="AQI", color="AQI", template="plotly_white"
     )
 
     st.plotly_chart(fig, use_container_width=True)
@@ -314,10 +293,7 @@ elif page=="📈 Visualizations":
     corr = numeric_df.corr()
 
     fig = px.imshow(
-        corr,
-        text_auto=".2f",
-        color_continuous_scale="RdYlGn_r",
-        aspect="auto"
+        corr, text_auto=".2f", color_continuous_scale="RdYlGn_r", aspect="auto"
     )
 
     st.plotly_chart(fig, use_container_width=True)
@@ -336,13 +312,10 @@ elif page=="📈 Visualizations":
         "NO2 (µg/m³)",
         "SO2 (µg/m³)",
         "NH3 (µg/m³)",
-        "O3 (µg/m³)"
+        "O3 (µg/m³)",
     ]
 
-    selected_pollutant = st.selectbox(
-        "Choose Pollutant",
-        pollutants
-    )
+    selected_pollutant = st.selectbox("Choose Pollutant", pollutants)
 
     fig = px.scatter(
         filtered_df,
@@ -350,7 +323,7 @@ elif page=="📈 Visualizations":
         y="AQI",
         color="AQI",
         size="AQI",
-        template="plotly_white"
+        template="plotly_white",
     )
 
     st.plotly_chart(fig, use_container_width=True)
@@ -367,7 +340,7 @@ elif page=="📈 Visualizations":
         filtered_df,
         y="AQI",
         color_discrete_sequence=["darkgreen"],
-        template="plotly_white"
+        template="plotly_white",
     )
 
     st.plotly_chart(fig, use_container_width=True)
@@ -380,31 +353,26 @@ elif page=="📈 Visualizations":
 
     st.subheader("Average Pollutant Levels")
 
-    pollutant_avg = pd.DataFrame({
-        "Pollutant":[
-            "PM2.5",
-            "PM10",
-            "NO2",
-            "SO2",
-            "NH3",
-            "O3"
-        ],
-        "Average":[
-            filtered_df["PM2.5 (µg/m³)"].mean(),
-            filtered_df["PM10 (µg/m³)"].mean(),
-            filtered_df["NO2 (µg/m³)"].mean(),
-            filtered_df["SO2 (µg/m³)"].mean(),
-            filtered_df["NH3 (µg/m³)"].mean(),
-            filtered_df["O3 (µg/m³)"].mean()
-        ]
-    })
+    pollutant_avg = pd.DataFrame(
+        {
+            "Pollutant": ["PM2.5", "PM10", "NO2", "SO2", "NH3", "O3"],
+            "Average": [
+                filtered_df["PM2.5 (µg/m³)"].mean(),
+                filtered_df["PM10 (µg/m³)"].mean(),
+                filtered_df["NO2 (µg/m³)"].mean(),
+                filtered_df["SO2 (µg/m³)"].mean(),
+                filtered_df["NH3 (µg/m³)"].mean(),
+                filtered_df["O3 (µg/m³)"].mean(),
+            ],
+        }
+    )
 
     fig = px.bar(
         pollutant_avg,
         x="Pollutant",
         y="Average",
         color="Average",
-        template="plotly_white"
+        template="plotly_white",
     )
 
     st.plotly_chart(fig, use_container_width=True)
@@ -416,7 +384,6 @@ elif page=="📈 Visualizations":
 # ==========================================================
 # PREDICTION PAGE
 # ==========================================================
-
 
 
 elif page == "🤖 Prediction":
@@ -431,188 +398,224 @@ elif page == "🤖 Prediction":
 
     st.divider()
 
-    
     # ==========================================================
-# ==========================================================
-# QUICK DEMO MODE
-# ==========================================================
+    # ==========================================================
+    # QUICK DEMO MODE
+    # ==========================================================
 
     st.subheader("Enter Air Quality Parameters")
 
     st.info(
-    "🧪 **Quick Demo Mode**\n\n"
-    "Select a pre-defined air quality scenario to automatically fill realistic input values for demonstration and testing."
-)
+        "🧪 **Quick Demo Mode**\n\n"
+        "Select a pre-defined air quality scenario to automatically fill realistic input values for demonstration and testing."
+    )
 
-    
     st.markdown("**Available Sample Scenarios**")
 
-scenario = st.selectbox(
-    "",
-    [
-        "✍️ Custom Manual Input",
+    scenario = st.selectbox(
+        "",
+        [
+            "✍️ Custom Manual Input",
+            "🟠 Moderate Air (Typical City Day)",
+            "🔴 Poor Air (High Pollution)",
+            "🟣 High Pollution (Near Dataset Maximum)",
+            "🟢 Good Air (Demo Only)",
+            "🟡 Satisfactory Air (Demo Only)",
+            "⚫ Severe Air (Demo Only)",
+        ],
+    )
+
+    st.caption(
+        "💡 Note: Some sample scenarios are for demonstration only because they are outside the model's training data."
+    )
+
+    # ==========================================================
+    # SAMPLE VALUES
+    # ==========================================================
+
+    samples = {
+        "✍️ Custom Manual Input": dict(
+            pm25=0,
+            pm10=0,
+            no2=0,
+            so2=0,
+            nh3=0,
+            o3=0,
+            temperature=0,
+            humidity=0,
+            wind_speed=0,
+        ),
+        "🟢 Good Air (Demo Only)": dict(
+            pm25=25,
+            pm10=45,
+            no2=18,
+            so2=6,
+            nh3=18,
+            o3=18,
+            temperature=24,
+            humidity=72,
+            wind_speed=2,
+        ),
+        "🟡 Satisfactory Air (Demo Only)": dict(
+            pm25=45,
+            pm10=80,
+            no2=25,
+            so2=7,
+            nh3=22,
+            o3=20,
+            temperature=25,
+            humidity=73,
+            wind_speed=2,
+        ),
+        "🟠 Moderate Air (Typical City Day)": dict(
+            pm25=100,
+            pm10=200,
+            no2=35,
+            so2=10,
+            nh3=30,
+            o3=20,
+            temperature=25,
+            humidity=70,
+            wind_speed=2,
+        ),
+        "🔴 Poor Air (High Pollution)": dict(
+            pm25=145,
+            pm10=275,
+            no2=42,
+            so2=11,
+            nh3=36,
+            o3=26,
+            temperature=26,
+            humidity=75,
+            wind_speed=1,
+        ),
+        "🟣 High Pollution (Near Dataset Maximum)": dict(
+            pm25=158,
+            pm10=300,
+            no2=44,
+            so2=11,
+            nh3=39,
+            o3=29,
+            temperature=26,
+            humidity=80,
+            wind_speed=1,
+        ),
+        "⚫ Severe Air (Demo Only)": dict(
+            pm25=220,
+            pm10=420,
+            no2=60,
+            so2=18,
+            nh3=50,
+            o3=40,
+            temperature=30,
+            humidity=82,
+            wind_speed=1,
+        ),
+    }
+    values = samples[scenario]
+
+    if scenario in [
         "🟠 Moderate Air (Typical City Day)",
         "🔴 Poor Air (High Pollution)",
         "🟣 High Pollution (Near Dataset Maximum)",
+    ]:
+        st.success(f"✅ '{scenario}' sample loaded successfully.")
+
+    elif scenario in [
         "🟢 Good Air (Demo Only)",
         "🟡 Satisfactory Air (Demo Only)",
-        "⚫ Severe Air (Demo Only)"
-    ]
-)
+        "⚫ Severe Air (Demo Only)",
+    ]:
+        st.warning(
+            "⚠️ This scenario is outside the model's training dataset.\n\n"
+            "The model was trained on AQI values approximately between 120 and 275.\n"
+            "Predictions for this scenario may not match the selected AQI category."
+        )
+    col1, col2 = st.columns(2)
 
-st.caption(
-    "💡 Note: Some sample scenarios are for demonstration only because they are outside the model's training data."
-)
+    with col1:
 
-# ==========================================================
-# SAMPLE VALUES
-# ==========================================================
+        pm25 = st.number_input(
+            "PM2.5 (µg/m³)",
+            min_value=0.0,
+            max_value=500.0,
+            value=float(values["pm25"]),
+            step=1.0,
+        )
 
-samples = {
+        pm10 = st.number_input(
+            "PM10 (µg/m³)",
+            min_value=0.0,
+            max_value=600.0,
+            value=float(values["pm10"]),
+            step=1.0,
+        )
 
-    "✍️ Custom Manual Input":
-    dict(pm25=0, pm10=0, no2=0, so2=0, nh3=0,
-         o3=0, temperature=0, humidity=0, wind_speed=0),
+        no2 = st.number_input(
+            "NO2 (µg/m³)",
+            min_value=0.0,
+            max_value=300.0,
+            value=float(values["no2"]),
+            step=1.0,
+        )
 
-    "🟢 Good Air (Demo Only)":
-    dict(pm25=25, pm10=45, no2=18, so2=6, nh3=18,
-         o3=18, temperature=24, humidity=72, wind_speed=2),
+        so2 = st.number_input(
+            "SO2 (µg/m³)",
+            min_value=0.0,
+            max_value=200.0,
+            value=float(values["so2"]),
+            step=1.0,
+        )
 
-    "🟡 Satisfactory Air (Demo Only)":
-    dict(pm25=45, pm10=80, no2=25, so2=7, nh3=22,
-         o3=20, temperature=25, humidity=73, wind_speed=2),
+        nh3 = st.number_input(
+            "NH3 (µg/m³)",
+            min_value=0.0,
+            max_value=200.0,
+            value=float(values["nh3"]),
+            step=1.0,
+        )
 
-    "🟠 Moderate Air (Typical City Day)":
-    dict(pm25=100, pm10=200, no2=35, so2=10, nh3=30,
-         o3=20, temperature=25, humidity=70, wind_speed=2),
+    with col2:
 
-    "🔴 Poor Air (High Pollution)":
-    dict(pm25=145, pm10=275, no2=42, so2=11, nh3=36,
-         o3=26, temperature=26, humidity=75, wind_speed=1),
+        o3 = st.number_input(
+            "O3 (µg/m³)",
+            min_value=0.0,
+            max_value=300.0,
+            value=float(values["o3"]),
+            step=1.0,
+        )
 
-    "🟣 High Pollution (Near Dataset Maximum)":
-    dict(pm25=158, pm10=300, no2=44, so2=11, nh3=39,
-         o3=29, temperature=26, humidity=80, wind_speed=1),
+        temperature = st.number_input(
+            "Temperature (°C)",
+            min_value=-10.0,
+            max_value=60.0,
+            value=float(values["temperature"]),
+            step=1.0,
+        )
 
-    "⚫ Severe Air (Demo Only)":
-    dict(pm25=220, pm10=420, no2=60, so2=18, nh3=50,
-         o3=40, temperature=30, humidity=82, wind_speed=1)
+        humidity = st.number_input(
+            "Humidity (%)",
+            min_value=0.0,
+            max_value=100.0,
+            value=float(values["humidity"]),
+            step=1.0,
+        )
 
-}
+        wind_speed = st.number_input(
+            "Wind Speed (m/s)",
+            min_value=0.0,
+            max_value=30.0,
+            value=float(values["wind_speed"]),
+            step=1.0,
+        )
 
-values = samples[scenario]
+    st.divider()
 
-if scenario in [
-    "🟠 Moderate Air (Typical City Day)",
-    "🔴 Poor Air (High Pollution)",
-    "🟣 High Pollution (Near Dataset Maximum)"
-]:
-    st.success(f"✅ '{scenario}' sample loaded successfully.")
+    if st.button("🔮 Predict AQI", use_container_width=True):
 
-elif scenario in [
-    "🟢 Good Air (Demo Only)",
-    "🟡 Satisfactory Air (Demo Only)",
-    "⚫ Severe Air (Demo Only)"
-]:
-    st.warning(
-        "⚠️ This scenario is outside the model's training dataset.\n\n"
-        "The model was trained on AQI values approximately between 120 and 275.\n"
-        "Predictions for this scenario may not match the selected AQI category."
-    )
-
-col1, col2 = st.columns(2)
-
-with col1:
-
-    pm25 = st.number_input(
-        "PM2.5 (µg/m³)",
-        min_value=0.0,
-        max_value=500.0,
-        value=float(values["pm25"]),
-        step=1.0
-    )
-
-    pm10 = st.number_input(
-        "PM10 (µg/m³)",
-        min_value=0.0,
-        max_value=600.0,
-        value=float(values["pm10"]),
-        step=1.0
-    )
-
-    no2 = st.number_input(
-        "NO2 (µg/m³)",
-        min_value=0.0,
-        max_value=300.0,
-        value=float(values["no2"]),
-        step=1.0
-    )
-
-    so2 = st.number_input(
-        "SO2 (µg/m³)",
-        min_value=0.0,
-        max_value=200.0,
-        value=float(values["so2"]),
-        step=1.0
-    )
-
-    nh3 = st.number_input(
-        "NH3 (µg/m³)",
-        min_value=0.0,
-        max_value=200.0,
-        value=float(values["nh3"]),
-        step=1.0
-    )
-
-with col2:
-
-    o3 = st.number_input(
-        "O3 (µg/m³)",
-        min_value=0.0,
-        max_value=300.0,
-        value=float(values["o3"]),
-        step=1.0
-    )
-
-    temperature = st.number_input(
-        "Temperature (°C)",
-        min_value=-10.0,
-        max_value=60.0,
-        value=float(values["temperature"]),
-        step=1.0
-    )
-
-    humidity = st.number_input(
-        "Humidity (%)",
-        min_value=0.0,
-        max_value=100.0,
-        value=float(values["humidity"]),
-        step=1.0
-    )
-
-    wind_speed = st.number_input(
-        "Wind Speed (m/s)",
-        min_value=0.0,
-        max_value=30.0,
-        value=float(values["wind_speed"]),
-        step=1.0
-    )
-
-st.divider()
-
-if st.button("🔮 Predict AQI", use_container_width=True):
-
-        input_data = np.array([[
-            pm25,
-            pm10,
-            no2,
-            so2,
-            nh3,
-            o3,
-            temperature,
-            humidity,
-            wind_speed
-        ]])
+        input_data = np.array(
+            [[pm25, pm10, no2, so2, nh3, o3, temperature, humidity, wind_speed]]
+        )
 
         prediction = model.predict(input_data)[0]
         prediction = round(float(prediction), 2)
@@ -623,67 +626,67 @@ if st.button("🔮 Predict AQI", use_container_width=True):
             category = "🟢 Good"
             color = "green"
             advice = [
-    "Air quality is excellent.",
-    "Outdoor activities are completely safe.",
-    "No mask is generally required.",
-    "Ideal for walking and exercise.",
-    "Keep monitoring AQI regularly."
-]
+                "Air quality is excellent.",
+                "Outdoor activities are completely safe.",
+                "No mask is generally required.",
+                "Ideal for walking and exercise.",
+                "Keep monitoring AQI regularly.",
+            ]
 
         elif prediction <= 100:
             category = "🟡 Satisfactory"
             color = "#8BC34A"
             advice = [
-    "Air quality is acceptable.",
-    "Outdoor activities are generally safe.",
-    "Sensitive individuals should stay alert.",
-    "Drink enough water.",
-    "Continue monitoring pollution levels."
-]
+                "Air quality is acceptable.",
+                "Outdoor activities are generally safe.",
+                "Sensitive individuals should stay alert.",
+                "Drink enough water.",
+                "Continue monitoring pollution levels.",
+            ]
 
         elif prediction <= 200:
             category = "🟠 Moderate"
             color = "orange"
             advice = [
-    "Sensitive individuals should reduce prolonged outdoor exposure.",
-    "Avoid heavy outdoor exercise.",
-    "Children and elderly should take extra care.",
-    "Wear a mask if pollution increases.",
-    "Keep windows closed during peak pollution."
-]
+                "Sensitive individuals should reduce prolonged outdoor exposure.",
+                "Avoid heavy outdoor exercise.",
+                "Children and elderly should take extra care.",
+                "Wear a mask if pollution increases.",
+                "Keep windows closed during peak pollution.",
+            ]
 
         elif prediction <= 300:
             category = "🔴 Poor"
             color = "red"
             advice = [
-    "Limit outdoor activities.",
-    "Wear an N95 mask while outside.",
-    "People with asthma should be cautious.",
-    "Children and elderly should stay indoors.",
-    "Use air purifiers if available."
-]
+                "Limit outdoor activities.",
+                "Wear an N95 mask while outside.",
+                "People with asthma should be cautious.",
+                "Children and elderly should stay indoors.",
+                "Use air purifiers if available.",
+            ]
 
         elif prediction <= 400:
             category = "🟣 Very Poor"
             color = "purple"
             advice = [
-    "Avoid outdoor activities.",
-    "Wear a certified N95 mask.",
-    "Keep doors and windows closed.",
-    "Use indoor air purification.",
-    "Consult a doctor if breathing discomfort occurs."
-]
+                "Avoid outdoor activities.",
+                "Wear a certified N95 mask.",
+                "Keep doors and windows closed.",
+                "Use indoor air purification.",
+                "Consult a doctor if breathing discomfort occurs.",
+            ]
 
         else:
             category = "⚫ Severe"
             color = "#5D1049"
             advice = [
-    "Stay indoors as much as possible.",
-    "Avoid all outdoor exercise.",
-    "Wear an N95 mask if going outside is unavoidable.",
-    "Children, elderly and patients should remain indoors.",
-    "Follow local pollution advisories."
-]
+                "Stay indoors as much as possible.",
+                "Avoid all outdoor exercise.",
+                "Wear an N95 mask if going outside is unavoidable.",
+                "Children, elderly and patients should remain indoors.",
+                "Follow local pollution advisories.",
+            ]
 
             st.success("✅ Prediction Completed Successfully")
 
@@ -691,24 +694,24 @@ if st.button("🔮 Predict AQI", use_container_width=True):
 
         st.markdown(
             f"""
-            <div style="
-            background:{color};
-            padding:25px;
-            border-radius:15px;
-            color:white;
-            text-align:center;
-            box-shadow:0px 4px 10px rgba(0,0,0,0.15);
-            ">
+                <div style="
+                background:{color};
+                padding:25px;
+                border-radius:15px;
+                color:white;
+                text-align:center;
+                box-shadow:0px 4px 10px rgba(0,0,0,0.15);
+                ">
 
-            <h2>Predicted AQI</h2>
+                <h2>Predicted AQI</h2>
 
-            <h1 style="font-size:55px;">{prediction}</h1>
+                <h1 style="font-size:55px;">{prediction}</h1>
 
-            <h2>{category}</h2>
+                <h2>{category}</h2>
 
-            </div>
-            """,
-            unsafe_allow_html=True
+                </div>
+                """,
+            unsafe_allow_html=True,
         )
 
         st.divider()
@@ -729,30 +732,27 @@ if st.button("🔮 Predict AQI", use_container_width=True):
                         {"range": [100, 200], "color": "#FFC107"},
                         {"range": [200, 300], "color": "#F44336"},
                         {"range": [300, 400], "color": "#9C27B0"},
-                        {"range": [400, 500], "color": "#6A1B9A"}
-                    ]
-                }
+                        {"range": [400, 500], "color": "#6A1B9A"},
+                    ],
+                },
             )
         )
 
-        gauge.update_layout(
-            height=300,
-            margin=dict(l=20, r=20, t=40, b=20)
-        )
+        gauge.update_layout(height=300, margin=dict(l=20, r=20, t=40, b=20))
 
         st.plotly_chart(gauge, use_container_width=True)
         st.markdown(
-    f"""
-    <div style="
-    text-align:center;
-    font-size:24px;
-    font-weight:bold;
-    ">
-    Current Status: {category}
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+            f"""
+        <div style="
+        text-align:center;
+        font-size:24px;
+        font-weight:bold;
+        ">
+        Current Status: {category}
+        </div>
+        """,
+            unsafe_allow_html=True,
+        )
 
         st.divider()
 
@@ -772,13 +772,9 @@ if st.button("🔮 Predict AQI", use_container_width=True):
         with c2:
             st.metric("Input Features", "9")
 
-        st.caption(
-            "Prediction generated using the trained XGBoost regression model."
-        )
+        st.caption("Prediction generated using the trained XGBoost regression model.")
 
-        st.caption(
-            f"Prediction Time: {datetime.now().strftime('%d-%m-%Y %I:%M %p')}"
-        )
+        st.caption(f"Prediction Time: {datetime.now().strftime('%d-%m-%Y %I:%M %p')}")
         st.divider()
 
         st.subheader("🎯 Prediction Reliability")
@@ -793,7 +789,7 @@ if st.button("🔮 Predict AQI", use_container_width=True):
             "O3": (15, 29),
             "Temperature": (21.8, 26.2),
             "Humidity": (70, 80),
-            "Wind Speed": (1.3, 2.2)
+            "Wind Speed": (1.3, 2.2),
         }
 
         input_values = {
@@ -805,7 +801,7 @@ if st.button("🔮 Predict AQI", use_container_width=True):
             "O3": o3,
             "Temperature": temperature,
             "Humidity": humidity,
-            "Wind Speed": wind_speed
+            "Wind Speed": wind_speed,
         }
 
         outside_count = 0
@@ -852,18 +848,18 @@ if st.button("🔮 Predict AQI", use_container_width=True):
         st.subheader("📊 AQI Classification Scale")
 
         st.markdown("""
-🟢 **Good** : 0 – 50
+                    🟢 **Good** : 0 – 50
 
-🟡 **Satisfactory** : 51 – 100
+                    🟡 **Satisfactory** : 51 – 100
 
-🟠 **Moderate** : 101 – 200
+                    🟠 **Moderate** : 101 – 200
 
-🔴 **Poor** : 201 – 300
+                    🔴 **Poor** : 201 – 300
 
-🟣 **Very Poor** : 301 – 400
+                    🟣 **Very Poor** : 301 – 400
 
-⚫ **Severe** : 401+
-""")
+                    ⚫ **Severe** : 401+
+                    """)
 
         st.divider()
 
@@ -878,18 +874,14 @@ if st.button("🔮 Predict AQI", use_container_width=True):
             "O₃",
             "Temperature",
             "Humidity",
-            "Wind Speed"
+            "Wind Speed",
         ]
 
-        importance_df = pd.DataFrame({
-            "Feature": feature_names,
-            "Importance": model.feature_importances_
-        })
-
-        importance_df = importance_df.sort_values(
-            by="Importance",
-            ascending=False
+        importance_df = pd.DataFrame(
+            {"Feature": feature_names, "Importance": model.feature_importances_}
         )
+
+        importance_df = importance_df.sort_values(by="Importance", ascending=False)
 
         fig = px.bar(
             importance_df,
@@ -899,39 +891,625 @@ if st.button("🔮 Predict AQI", use_container_width=True):
             color="Importance",
             color_continuous_scale="Greens",
             text="Importance",
-            template="plotly_white"
+            template="plotly_white",
         )
 
-        fig.update_traces(
-            texttemplate="%{text:.3f}",
-            textposition="outside"
-        )
+        fig.update_traces(texttemplate="%{text:.3f}", textposition="outside")
 
         fig.update_layout(
             yaxis=dict(categoryorder="total ascending"),
             coloraxis_showscale=False,
             xaxis_title="Feature Importance",
             yaxis_title="",
-            height=450
+            height=450,
         )
 
         st.plotly_chart(fig, use_container_width=True)
 
-        
+
 # ==========================================================
 # ABOUT PAGE
 # ==========================================================
 
-elif page=="ℹ About":
+elif page == "ℹ About":
 
-    st.title("About")
+    # -----------------------------
+    # Premium CSS
+    # -----------------------------
 
-    st.write("AQI Prediction System")
+    st.markdown(
+        """
+    <style>
 
-    st.write("Machine Learning Model : Random Forest & XGBoost")
+    .hero{
 
-    st.write("Framework : Streamlit")
+        background: linear-gradient(135deg,#11998e,#38ef7d);
 
-    st.write("Language : Python")
+        padding:45px;
 
-    st.write("Dataset : Prayagraj Air Quality Dataset")
+        border-radius:22px;
+
+        color:white;
+
+        text-align:center;
+
+        box-shadow:0px 12px 35px rgba(0,0,0,0.25);
+
+        margin-bottom:25px;
+
+    }
+
+    .hero h1{
+
+        font-size:52px;
+
+        margin-bottom:10px;
+
+    }
+
+    .hero h3{
+
+        font-size:24px;
+
+        font-weight:400;
+
+        margin-bottom:15px;
+
+    }
+
+    .hero p{
+
+        font-size:18px;
+
+        opacity:0.95;
+
+    }
+
+    .divider{
+
+        height:4px;
+
+        background:linear-gradient(to right,#11998e,#38ef7d);
+
+        border-radius:20px;
+
+        margin-top:30px;
+
+        margin-bottom:30px;
+
+    }
+
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    # -----------------------------
+    # HERO SECTION
+    # -----------------------------
+
+    st.markdown(
+        """
+
+    <div class="hero">
+
+    <h1>🌍 AQI Prediction System</h1>
+
+    <h3>AI Powered Air Quality Intelligence Platform</h3>
+
+    <p>
+    Predict • Analyze • Visualize • Protect
+    </p>
+
+    </div>
+
+    """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
+
+    # -----------------------------
+    # Introduction
+    # -----------------------------
+
+    st.markdown("## 🚀 Project Overview")
+
+    st.write("""
+
+This project is an intelligent Machine Learning based Air Quality Prediction System
+developed using Python, Streamlit and XGBoost Regression.
+
+It predicts the Air Quality Index (AQI) using important environmental parameters
+such as PM2.5, PM10, NO₂, SO₂, NH₃, O₃, Temperature, Humidity and Wind Speed.
+
+The dashboard is designed to provide an easy-to-understand interface for AQI
+prediction, pollution analysis and interactive data visualization.
+
+""")
+
+    st.divider()
+
+    # -----------------------------
+    # Quick Highlights
+    # -----------------------------
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+
+        st.info("""
+### 🤖 Model
+
+XGBoost Regression
+
+Random Forest
+""")
+
+    with col2:
+
+        st.success("""
+### 📊 Dataset
+
+Prayagraj
+
+Air Quality Dataset
+""")
+
+    with col3:
+
+        st.warning("""
+### ⚡ Framework
+
+Python
+
+Streamlit
+""")
+
+    st.divider()
+    # ==========================================================
+    # PROJECT STATISTICS
+    # ==========================================================
+
+    st.markdown("## 📊 Project Statistics")
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric(
+            label="📂 Dataset",
+            value="1",
+            delta="Prayagraj",
+        )
+
+    with col2:
+        st.metric(
+            label="🤖 ML Models",
+            value="2",
+            delta="RF + XGBoost",
+        )
+
+    with col3:
+        st.metric(
+            label="📈 Features",
+            value="9",
+            delta="Air Parameters",
+        )
+
+    with col4:
+        st.metric(
+            label="⚡ Prediction",
+            value="Realtime",
+            delta="Instant",
+        )
+
+    st.divider()
+
+    # ==========================================================
+    # TECHNOLOGY STACK
+    # ==========================================================
+
+    st.markdown("## 🛠 Technology Stack")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+
+        st.success("""
+    ### 🐍 Python
+
+    ✔ Data Processing
+
+    ✔ Machine Learning
+
+    ✔ Streamlit Backend
+    """)
+
+    with col2:
+
+        st.info("""
+    ### 📊 Libraries
+
+    ✔ Pandas
+
+    ✔ NumPy
+
+    ✔ Plotly
+
+    ✔ Joblib
+    """)
+
+    with col3:
+
+        st.warning("""
+    ### 🤖 AI Models
+
+    ✔ Random Forest
+
+    ✔ XGBoost
+
+    ✔ Regression
+    """)
+
+    st.divider()
+
+    # ==========================================================
+    # PROJECT FEATURES
+    # ==========================================================
+
+    st.markdown("## ⭐ Key Features")
+
+    c1, c2 = st.columns(2)
+
+    with c1:
+
+        st.markdown("""
+    ✅ Real-Time AQI Prediction
+
+    ✅ Interactive Dashboard
+
+    ✅ AQI Gauge Meter
+
+    ✅ Feature Importance Graph
+
+    ✅ Health Advisory
+
+    ✅ Reliability Checker
+    """)
+
+    with c2:
+
+        st.markdown("""
+    ✅ Pollution Visualization
+
+    ✅ Professional UI
+
+    ✅ Demo Prediction Mode
+
+    ✅ Dataset Explorer
+
+    ✅ Responsive Layout
+
+    ✅ Interactive Charts
+    """)
+
+    st.divider()
+
+    # ==========================================================
+    # PROJECT WORKFLOW
+    # ==========================================================
+
+    st.markdown("## 🔄 Project Workflow")
+    st.info("""
+    📂 Dataset Collection
+
+    ⬇
+
+    🧹 Data Cleaning
+
+    ⬇
+
+    📊 Data Visualization
+
+    ⬇
+
+    🤖 Model Training
+
+    ⬇
+
+    📈 AQI Prediction
+
+    ⬇
+
+    🌍 Dashboard Deployment
+    """)
+    # ==========================================================
+    # DEVELOPER PROFILE SECTION
+    # ==========================================================
+
+    st.divider()
+
+    st.subheader("👩‍💻 Developer Profile")
+
+    # Load Profile Image
+
+    profile_image = Image.open("Images/Anjalipic.jpg")
+
+    # Main Card
+
+    st.markdown(
+        """
+    <div style="
+    background:linear-gradient(135deg,#f1f8e9,#ffffff);
+    padding:30px;
+    border-radius:25px;
+    border:1px solid #dcedc8;
+    box-shadow:0px 8px 25px rgba(0,0,0,0.08);
+    ">
+    """,
+        unsafe_allow_html=True,
+    )
+
+    # Photo + Details Layout
+
+    col1, col2 = st.columns([1, 3])
+
+    with col1:
+
+        st.image(profile_image, width=170)
+
+    with col2:
+
+        st.markdown(
+            """
+        <h1 style="
+        color:#2e7d32;
+        margin-bottom:5px;
+        ">
+        Anjali Tiwari
+        </h1>
+
+
+        <p style="
+        font-size:17px;
+        color:#555;
+        ">
+        CSE (Data Science) Student |
+        Python Developer |
+        Machine Learning Enthusiast
+        </p>
+
+
+        <hr style="
+        border:0.5px solid #dcedc8;
+        ">
+
+
+        <p style="
+        font-size:16px;
+        color:#444;
+        line-height:1.6;
+        ">
+
+        Passionate about building intelligent applications
+        using Python, Data Science and Machine Learning.
+
+        This AQI Prediction System transforms real-world
+        environmental data into meaningful insights through
+        machine learning models and interactive visualization.
+
+        </p>
+
+
+
+        <h3 style="color:#388e3c;">
+        🚀 Skills & Expertise
+        </h3>
+
+
+        <p style="
+        font-size:16px;
+        color:#555;
+        ">
+
+        🐍 Python Programming <br>
+        📊 Pandas & NumPy <br>
+        🤖 Machine Learning (XGBoost, Random Forest) <br>
+        📈 Data Visualization (Plotly) <br>
+        🌐 Streamlit Dashboard Development <br>
+        🗄 SQL & Data Handling
+
+        </p>
+
+
+
+        <h3 style="color:#388e3c;">
+        📌 Project Contribution
+        </h3>
+
+
+        <p style="
+        font-size:16px;
+        color:#555;
+        line-height:1.5;
+        ">
+
+        Designed and developed the AQI Prediction Dashboard
+        including data preprocessing, machine learning model
+        integration and interactive visualization.
+
+        </p>
+
+
+
+        <h3 style="color:#388e3c;">
+        📅 Development Journey
+        </h3>
+
+
+        <p style="
+        font-size:16px;
+        color:#555;
+        ">
+
+        📂 Dataset Collection →
+        🧹 Data Cleaning →
+        🤖 Model Training →
+        📊 Dashboard Development →
+        🚀 Deployment
+
+        </p>
+
+
+
+        <h3 style="color:#388e3c;">
+        🌱 Learning Outcome
+        </h3>
+
+
+        <p style="
+        font-size:16px;
+        color:#555;
+        ">
+
+        Practical experience in Machine Learning workflow,
+        real-world datasets, model implementation and
+        interactive Data Science applications.
+
+        </p>
+
+
+
+        <h3 style="color:#388e3c;">
+        🔗 Connect With Me
+        </h3>
+
+
+        <a href="https://github.com/Anjalitiwari99"
+        target="_blank"
+        style="
+        text-decoration:none;
+        color:#24292e;
+        font-size:18px;
+        font-weight:600;
+        ">
+
+        <i class="fa-brands fa-github"></i>
+        GitHub
+
+        </a>
+
+
+        &nbsp;&nbsp;&nbsp;
+
+
+
+        <a href="https://www.linkedin.com/in/anjali-tiwari-91aa37318"
+        target="_blank"
+        style="
+        text-decoration:none;
+        color:#0a66c2;
+        font-size:18px;
+        font-weight:600;
+        ">
+
+        <i class="fa-brands fa-linkedin"></i>
+        LinkedIn
+
+        </a>
+
+
+        &nbsp;&nbsp;&nbsp;
+
+
+
+        <a href="https://x.com/anjali_tiwari95"
+        target="_blank"
+        style="
+        text-decoration:none;
+        color:#000000;
+        font-size:18px;
+        font-weight:600;
+        ">
+
+        <i class="fa-brands fa-x-twitter"></i>
+        X
+
+        </a>
+
+
+        """,
+            unsafe_allow_html=True,
+        )
+
+    # Close Card
+
+    st.markdown(
+        """
+    </div>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    # ==========================================================
+    # CHAPTER 5 : FINAL MINIMAL FOOTER
+    # ==========================================================
+
+    st.divider()
+
+    st.markdown(
+        """
+    <style>
+
+    .footer-box {
+
+    background:linear-gradient(90deg,#f1f8e9,#ffffff);
+
+    padding:15px;
+
+    border-radius:15px;
+
+    border:1px solid #dcedc8;
+
+    text-align:center;
+
+    font-size:15px;
+
+    color:#666;
+
+    box-shadow:0px 4px 15px rgba(0,0,0,0.05);
+
+    }
+
+
+    .footer-box strong {
+
+    color:#2e7d32;
+
+    }
+
+
+    </style>
+
+
+
+    <div class="footer-box">
+
+
+    🌱 <strong>AQI Prediction System</strong>
+
+    &nbsp; | &nbsp;
+
+    Developed by <strong>Anjali Tiwari</strong>
+
+    &nbsp; | &nbsp;
+
+    © 2026
+
+
+    </div>
+
+
+    """,
+        unsafe_allow_html=True,
+    )
