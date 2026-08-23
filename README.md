@@ -4,7 +4,7 @@
 
 An interactive **Air Quality Prediction System** developed using Machine Learning to analyze and predict the **Air Quality Index (AQI)** based on major environmental and meteorological parameters.
 
-The project focuses on **Prayagraj air quality data** and provides an interactive Streamlit dashboard for data exploration, visualization, AQI prediction, health awareness, and machine learning model analysis.
+The project focuses on **Prayagraj air quality data** and provides an interactive Streamlit dashboard for data exploration, visualization, AQI prediction, health awareness, and Machine Learning model analysis.
 
 ---
 
@@ -28,7 +28,7 @@ The main objective of this project is to build an intelligent system that can:
 
 The Home page provides an overview of the AQI Prediction platform, important AQI information, project statistics, and dataset insights.
 
-![AQI Prediction System Home Page](Images/home_dashboard.png)
+![AQI Prediction System Home Page](Images/home_dashboard.png.png)
 
 ---
 
@@ -52,7 +52,7 @@ The About page provides information about the project, technology stack, workflo
 
 The project compares the performance of five Machine Learning regression models.
 
-![AQI Machine Learning Model Comparison](Images/model_comparison.png)
+![AQI Machine Learning Model Comparison](Images/model_comparison.png.png)
 
 ---
 
@@ -134,7 +134,7 @@ The models were evaluated and compared using:
 Based on the final model comparison, **Linear Regression** achieved the best overall performance among the evaluated models.
 
 | Metric | Score |
-|--------|------:|
+|---|---:|
 | MAE | 3.35 |
 | RMSE | 4.28 |
 | R² Score | 0.9427 |
@@ -148,7 +148,7 @@ The trained Linear Regression model is used as the final prediction model in the
 The prediction system uses the following 9 features:
 
 | Parameter | Description |
-|-----------|-------------|
+|---|---|
 | PM2.5 | Fine particulate matter |
 | PM10 | Coarse particulate matter |
 | NO₂ | Nitrogen dioxide |
@@ -180,27 +180,29 @@ The prediction system uses the following 9 features:
 
 # 🔄 Project Workflow
 
-Prayagraj AQI Dataset  
-↓  
-Data Preprocessing  
-↓  
-Exploratory Data Analysis  
-↓  
-Data Visualization  
-↓  
-Train Multiple ML Models  
-↓  
-Model Evaluation & Comparison  
-↓  
-Select Best Performing Model  
-↓  
-Save Trained Model  
-↓  
-Streamlit Dashboard  
-↓  
-User Input → AQI Prediction  
-↓  
-AQI Status + Gauge + Health Advisory  
+```text
+Prayagraj AQI Dataset
+        ↓
+Data Preprocessing
+        ↓
+Exploratory Data Analysis
+        ↓
+Data Visualization
+        ↓
+Train Multiple ML Models
+        ↓
+Model Evaluation & Comparison
+        ↓
+Select Best Performing Model
+        ↓
+Save Trained Model
+        ↓
+Streamlit Dashboard
+        ↓
+User Input → AQI Prediction
+        ↓
+AQI Status + Gauge + Health Advisory
+```
 
 ---
 
@@ -239,33 +241,35 @@ AQI Status + Gauge + Health Advisory
 
 # 📂 Project Structure
 
+```text
 AQI_PREDICTION/
-
-├── data/  
-│   └── cleaned_aqi_dataset.csv  
-
-├── Images/  
-│   ├── Anjalipic.jpg  
-│   ├── Prayagraj_Hero_image.png  
-│   ├── home_dashboard.png  
-│   ├── prediction_dashboard.png.png  
-│   ├── about_dashboard.png.png  
-│   └── model_comparison.png  
-
-├── models/  
-│   ├── linear_regression_aqi_model.pkl  
-│   ├── decision_tree_aqi_model.pkl  
-│   ├── random_forest_aqi_model.pkl  
-│   ├── gradient_boosting_aqi_model.pkl  
-│   └── xgboost_aqi_model.pkl  
-
-├── notebooks/  
-│   └── 01_Data_Preprocessing.ipynb  
-
-├── app.py  
-├── requirements.txt  
-├── README.md  
-└── .gitignore
+│
+├── data/
+│   └── cleaned_aqi_dataset.csv
+│
+├── Images/
+│   ├── about_dashboard.png.png
+│   ├── Anjalipic.jpg
+│   ├── home_dashboard.png.png
+│   ├── model_comparison.png.png
+│   ├── Prayagraj_Hero_image.png
+│   └── prediction_dashboard.png.png
+│
+├── models/
+│   ├── decision_tree_aqi_model.pkl
+│   ├── gradient_boosting_aqi_model.pkl
+│   ├── linear_regression_aqi_model.pkl
+│   ├── random_forest_aqi_model.pkl
+│   └── xgboost_aqi_model.pkl
+│
+├── notebooks/
+│   └── 01_Data_Preprocessing.ipynb
+│
+├── .gitignore
+├── app.py
+├── README.md
+└── requirements.txt
+```
 
 ---
 
@@ -273,17 +277,22 @@ AQI_PREDICTION/
 
 ## 1. Clone the Repository
 
-git clone https://github.com/Anjalitwari99/AQI_PREDICTION.git
-
+```bash
+git clone <repository-url>
 cd AQI_PREDICTION
+```
 
 ## 2. Install Dependencies
 
+```bash
 pip install -r requirements.txt
+```
 
 ## 3. Run the Streamlit Application
 
+```bash
 streamlit run app.py
+```
 
 The application will open in your web browser.
 
@@ -293,7 +302,7 @@ The application will open in your web browser.
 
 This project was developed as a practical implementation of **Data Science and Machine Learning concepts**, covering data preprocessing, exploratory data analysis, visualization, model development, evaluation, and deployment.
 
-The project work also reflects practical learning gained through the **NIT Patna internship experience**.
+The project work also reflects practical learning gained through internship experience.
 
 ---
 
