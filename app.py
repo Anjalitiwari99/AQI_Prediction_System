@@ -68,14 +68,17 @@ footer{
 # ==========================================================
 # LOAD DATASET
 # ==========================================================
+from pathlib import Path
 
-DATA_PATH = "data/cleaned_aqi_dataset.csv"
+DATA_PATH = Path(__file__).parent / "data" / "cleaned_aqi_dataset.csv"
 
 try:
     df = pd.read_csv(DATA_PATH)
     data_loaded = True
-except Exception:
+except Exception as e:
+    df = pd.DataFrame()
     data_loaded = False
+    st.error(f"Dataset loading error: {e}")
 
     # ==========================================================
 # LOAD MODEL
