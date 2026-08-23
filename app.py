@@ -81,7 +81,7 @@ except Exception:
 # LOAD MODEL
 # ==========================================================
 
-MODEL_PATH = "models/xgboost_aqi_model.pkl"
+MODEL_PATH = "models/linear_regression_aqi_model.pkl"
 
 try:
     model = joblib.load(MODEL_PATH)
@@ -102,7 +102,7 @@ page = st.sidebar.radio(
 
 st.sidebar.markdown("---")
 
-st.sidebar.success("Model : Random Forest & XGBoost")
+st.sidebar.success("Linear Regression Model")
 
 st.sidebar.markdown("---")
 
@@ -114,8 +114,7 @@ st.sidebar.caption("AQI Prediction System")
 
 st.sidebar.markdown("---")
 
-st.sidebar.info(
-"""
+st.sidebar.info("""
 🌍 **Project Focus**
 
 Air Quality Monitoring
@@ -123,12 +122,10 @@ Air Quality Monitoring
 AI Based AQI Prediction
 
 Data Driven Insights
-"""
-)
+""")
 
 
-st.sidebar.success(
-"""
+st.sidebar.success("""
 🤖 **Technology Stack**
 
 🐍 Python
@@ -137,16 +134,15 @@ st.sidebar.success(
 
 🧠 Machine Learning
 
-⚡ XGBoost Model
-"""
-)
+⚡ Linear Regression Model
+""")
 
 
 st.sidebar.markdown("---")
 
 
 st.sidebar.markdown(
-"""
+    """
 <div style="
 background:#e8f5e9;
 padding:15px;
@@ -166,15 +162,13 @@ Build Awareness
 
 </div>
 """,
-unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 
 st.sidebar.markdown("---")
 
-st.sidebar.caption(
-"💚 AI for Cleaner Tomorrow"
-)
+st.sidebar.caption("💚 AI for Cleaner Tomorrow")
 
 # ==========================================================
 # CHAPTER 1 : HERO SECTION
@@ -225,11 +219,15 @@ if page == "🏠 Home":
         st.info("""
     ### 🤖 AI Powered
 
+    ✔ Linear Regression Model
+
+    ✔ Decision Tree Model
+
     ✔ Random Forest Model
 
     ✔ XGBoost Model
 
-    ✔ Intelligent AQI Prediction
+    ✔ Gradient Boosting Model
     """)
 
     with c3:
@@ -441,7 +439,7 @@ if page == "🏠 Home":
 
     with col3:
 
-        st.metric(label="🤖 ML Models", value="2")
+        st.metric(label="🤖 ML Models", value="5")
 
     with col4:
 
@@ -461,7 +459,7 @@ if page == "🏠 Home":
     - 📄 **Total Records:** {total_records:,}
     - 📑 **Total Columns:** {total_features}
     - 🧪 **Prediction Inputs:** 9
-    - 🤖 **Machine Learning Models:** 2
+    - 🤖 **Machine Learning Models:** 5
     - 📈 **Average AQI:** {average_aqi}
     - 🚨 **Maximum AQI:** {maximum_aqi}
 
@@ -483,9 +481,15 @@ if page == "🏠 Home":
 
     ### 🤖 Models Used
 
-    ✅ Random Forest Regressor
+    ✅ Linear Regression Model
 
-    ✅ XGBoost Regressor
+    ✅ Decision Tree Model
+
+    ✅ Random Forest Model
+
+    ✅ XGBoost Model
+
+    ✅ Gradient Boosting Model
 
     ---
 
@@ -552,9 +556,11 @@ if page == "🏠 Home":
 
     with c2:
         st.markdown("### 🤖 Technology")
+        st.write("Linear Regression")
+        st.write("Decision Tree")
         st.write("Random Forest")
         st.write("XGBoost")
-        st.caption("Machine Learning")
+        st.caption("Gradient Boosting")
 
     with c3:
         st.markdown("### 📅 Project Info")
@@ -1244,12 +1250,12 @@ elif page == "🤖 Prediction":
         c1, c2 = st.columns(2)
 
         with c1:
-            st.metric("Model Used", "XGBoost")
+            st.metric("Model Used", "Linear Regression")
 
         with c2:
             st.metric("Input Features", "9")
 
-        st.caption("Prediction generated using the trained XGBoost regression model.")
+        st.caption("Prediction generated using the trained Linear Regression model.")
 
         st.caption(f"Prediction Time: {datetime.now().strftime('%d-%m-%Y %I:%M %p')}")
         st.divider()
@@ -1354,29 +1360,69 @@ elif page == "🤖 Prediction":
             "Wind Speed",
         ]
 
-        importance_df = pd.DataFrame(
-            {"Feature": feature_names, "Importance": model.feature_importances_}
+        # Current input values
+        current_values = np.array(
+            [
+                pm25,
+                pm10,
+                no2,
+                so2,
+                nh3,
+                o3,
+                temperature,
+                humidity,
+                wind_speed,
+            ]
         )
 
-        importance_df = importance_df.sort_values(by="Importance", ascending=False)
+        # Linear Regression coefficients
+        coefficients = np.array(model.coef_)
+
+        # Calculate contribution of each feature
+        raw_contributions = coefficients * current_values
+
+        # Use absolute contribution magnitude for percentage
+        absolute_contributions = np.abs(raw_contributions)
+
+        total_contribution = absolute_contributions.sum()
+
+        if total_contribution > 0:
+            contribution_percent = (absolute_contributions / total_contribution) * 100
+        else:
+            contribution_percent = np.zeros(len(feature_names))
+
+        importance_df = pd.DataFrame(
+            {
+                "Feature": feature_names,
+                "Contribution": contribution_percent,
+            }
+        )
+
+        importance_df = importance_df.sort_values(
+            by="Contribution",
+            ascending=False,
+        )
 
         fig = px.bar(
             importance_df,
-            x="Importance",
+            x="Contribution",
             y="Feature",
             orientation="h",
-            color="Importance",
+            color="Contribution",
             color_continuous_scale="Greens",
-            text="Importance",
+            text="Contribution",
             template="plotly_white",
         )
 
-        fig.update_traces(texttemplate="%{text:.3f}", textposition="outside")
+        fig.update_traces(
+            texttemplate="%{text:.1f}%",
+            textposition="outside",
+        )
 
         fig.update_layout(
             yaxis=dict(categoryorder="total ascending"),
             coloraxis_showscale=False,
-            xaxis_title="Feature Importance",
+            xaxis_title="Contribution (%)",
             yaxis_title="",
             height=450,
         )
@@ -1495,7 +1541,7 @@ elif page == "ℹ About":
     st.write("""
 
 This project is an intelligent Machine Learning based Air Quality Prediction System
-developed using Python, Streamlit and XGBoost Regression.
+developed using Python, Streamlit and Linear Regression.
 
 It predicts the Air Quality Index (AQI) using important environmental parameters
 such as PM2.5, PM10, NO₂, SO₂, NH₃, O₃, Temperature, Humidity and Wind Speed.
@@ -1518,9 +1564,15 @@ prediction, pollution analysis and interactive data visualization.
         st.info("""
 ### 🤖 Model
 
-XGBoost Regression
+Linear Regression
+
+Decision Tree
 
 Random Forest
+
+XGBoost
+
+Gradient Boosting
 """)
 
     with col2:
@@ -1562,8 +1614,8 @@ Streamlit
     with col2:
         st.metric(
             label="🤖 ML Models",
-            value="2",
-            delta="RF + XGBoost",
+            value="5",
+            delta="RF + XGBoost + Linear Regression + Decision Tree + Gradient Boosting",
         )
 
     with col3:
@@ -1621,11 +1673,15 @@ Streamlit
         st.warning("""
     ### 🤖 AI Models
 
-    ✔ Random Forest
+    ✔ Linear Regression Model
 
-    ✔ XGBoost
+    ✔ Decision Tree Model
 
-    ✔ Regression
+    ✔ Random Forest Model
+
+    ✔ XGBoost Model
+
+    ✔ Gradient Boosting Model
     """)
 
     st.divider()
@@ -1791,7 +1847,7 @@ Streamlit
 
         🐍 Python Programming <br>
         📊 Pandas & NumPy <br>
-        🤖 Machine Learning (XGBoost, Random Forest) <br>
+        🤖 Machine Learning (Linear Regression, Decision Tree, Random Forest, XGBoost, Gradient Boosting) <br>
         📈 Data Visualization (Plotly) <br>
         🌐 Streamlit Dashboard Development <br>
         🗄 SQL & Data Handling
