@@ -70,7 +70,7 @@ footer{
 # ==========================================================
 from pathlib import Path
 
-DATA_PATH = Path(__file__).parent / "data" / "cleaned_aqi_dataset.csv"
+DATA_PATH = Path(__file__).parent / "Data" / "cleaned_aqi_dataset.csv"
 
 try:
     df = pd.read_csv(DATA_PATH)
