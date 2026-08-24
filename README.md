@@ -1,3 +1,8 @@
+# ## 🚀 Live Demo
+
+🔗 **[Open AQI Prediction Dashboard](YOUR_DEPLOYED_STREAMLIT_LINK)**
+
+
 # 🌿 AQI Prediction System
 
 ### Machine Learning Based Air Quality Prediction & Intelligence Dashboard
